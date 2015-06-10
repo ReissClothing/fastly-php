@@ -1,5 +1,6 @@
 Fastly PHP Client
 ====
+This package uses [Guzzle](https://github.com/guzzle/guzzle) as the http client, but can use any client that implements ``GuzzleHttp\ClientInterface`` and returns a ``Psr\Http\Message\ResponseInterface`` response.
 
 Installation via Composer
 -------------------------
@@ -35,7 +36,7 @@ The recommended method to install _Fastly-PHP_ is through [Composer](http://getc
         <?php
         require 'vendor/autoload.php';
 
-        $client = new Fastly\API();
+        $client = new Fastly\Fastly(new GuzzleHttp\Client(), 'api_key');
     ```
 You can find out more on how to install Composer, configure autoloading, and other best-practices for defining dependencies at [getcomposer.org](http://getcomposer.org).
 
@@ -47,13 +48,19 @@ Example
 ---
 
 ```php
-$fastly = new Fastly\API();
-$fastly->API_purge( 'http://example.com/page.html' );
+$fastly = new Fastly\Fastly(new GuzzleHttp\Client(), 'api_key');
+
+$result = $fastly->purgeAll('some_service_id');
+
+$result = $fastly->send('GET', 'stats?from=1+day+ago');
 ```
+``$result`` is an instance of ``GuzzleHttp\Psr7\Response``
+
+Tests
+---
+Run tests with ``bin/phpspec run``
 
 TODO
 -----
 docs
 consistantly formatted docs
-rest of the API functions
-unit test files
